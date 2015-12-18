@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WakeUpAtDestination</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="button_ok">Ok</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Latitude and Longitude</string>
+    <string name="no_address_found">No Valid Address Found</string>
+    <string name="address_found">Address Found</string>
+    <string name="destination_key">DestinationGeofence</string>
+</resources>

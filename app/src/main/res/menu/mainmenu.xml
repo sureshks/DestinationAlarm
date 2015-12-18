@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/wru_action"
+        android:title="WRU"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/settings_action"
+        android:title="Settings"
+        app:showAsAction="collapseActionView">
+    </item>
+    <item
+        android:id="@+id/Help"
+        android:title="Help"
+        app:showAsAction="collapseActionView">
+    </item>
+</menu>
