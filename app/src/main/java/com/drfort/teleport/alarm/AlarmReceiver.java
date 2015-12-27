@@ -1,4 +1,4 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.alarm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,6 +15,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.drfort.teleport.wakeupatdestination.MainActivityMaps;
+import com.drfort.teleport.wakeupatdestination.R;
+
 /**
  * Created by ssres on 12/7/15.
  */
@@ -28,13 +31,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Intent notificationIntent = new Intent(context, MainActivityMaps.class);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(MainActivityMaps.class);
         stackBuilder.addNextIntent(notificationIntent);
         PendingIntent pendingIntent = stackBuilder.
-                getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-       // PendingIntent pendingIntent = PendingIntent.
-       //         getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
+                getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);*/
+
+        PendingIntent pendingIntent = PendingIntent.
+                getActivity(context, (int) System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
@@ -43,6 +47,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentText("Please Wake Up: You are close to destination")
                 .setSound(alarmUri, RingtoneManager.TYPE_ALARM)
                 .setPriority(Notification.PRIORITY_HIGH)
+                .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
         Notification notification = notificationBuilder.build();
         notification.flags |= notification.FLAG_INSISTENT;
@@ -54,17 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+        notificationManager.notify(0, notification);
         screenOn.release();
-        /*Notification notification = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_play_light)
-                .setContentTitle("Alarm")
-                .setContentText("Please Wake Up: You are close to destination")
-                .setContentIntent(pendingIntent)
-                .setSound(alarmUri)
-                .setAutoCancel(true)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .build();
-        notificationManager.notify(12,notification);*/
     }
 }

@@ -1,13 +1,15 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.geofence;
 
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Parcelable;
 import android.util.Log;
 
+import com.drfort.teleport.constants.Constants;
+import com.drfort.teleport.wakeupatdestination.MainActivityMaps;
+import com.drfort.teleport.wakeupatdestination.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;

@@ -11,6 +11,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.drfort.teleport.address.AddressResultReceiver;
+import com.drfort.teleport.address.FetchAddressIntentService;
+import com.drfort.teleport.constants.Constants;
+import com.drfort.teleport.geofence.GeofenceTrigger;
+import com.drfort.teleport.maps.GoogleMapsHelper;
+import com.drfort.teleport.settings.SettingsActivity;
+import com.drfort.teleport.utils.Utils;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -26,9 +33,10 @@ public class MainActivityMaps extends AppCompatActivity
         public static GoogleApiClient googleApiClient;
         public static Circle circle;
         public static Location location;
+        public static GoogleMapsHelper mapsHelper;
         private AddressResultReceiver addressResultReceiver =
                 new AddressResultReceiver(new Handler(),MainActivityMaps.this);
-        private  GeofenceTrigger geofenceTrigger;
+        private GeofenceTrigger geofenceTrigger;
 
      protected static Location setLocation(){
          Location loc = new Location("");
@@ -39,12 +47,12 @@ public class MainActivityMaps extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
 
+        setContentView(R.layout.activity_maps);
         setActionBar();
         getMapFragment();
 
-        GoogleMapsHelper mapsHelper = new GoogleMapsHelper(MainActivityMaps.this, mMap);
+        mapsHelper = new GoogleMapsHelper(MainActivityMaps.this, mMap);
         googleApiClient = mapsHelper.getGoogleClient();
     }
 
@@ -72,17 +80,16 @@ public class MainActivityMaps extends AppCompatActivity
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()){
                 case R.id.wru_action:
-                    //AlarmTrigger alarmTrigger = new AlarmTrigger(this);
-                    //alarmTrigger.triggerAlarmNow();
-                    //startIntentService();
-                    geofenceTrigger = new GeofenceTrigger(this,
-                            googleApiClient,MainActivityMaps.location);
-                    geofenceTrigger.addGeofence();
+                    if(Utils.isGoogleApiConnected(googleApiClient)) {
+                        geofenceTrigger = new GeofenceTrigger(this,
+                                googleApiClient, MainActivityMaps.location);
+                        geofenceTrigger.addGeofence();
+                    }
                     return true;
                 case R.id.settings_action:
-                    geofenceTrigger = new GeofenceTrigger(this,
-                            googleApiClient, setLocation());
-                    geofenceTrigger.addGeofence();
+                    Intent settingsIntent = new Intent(this,SettingsActivity.class);
+                    this.startActivity(settingsIntent);
+                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -91,14 +98,15 @@ public class MainActivityMaps extends AppCompatActivity
         @Override
         protected void onStart() {
             Log.d("---OnStart", "Started");
-            googleApiClient.connect();
             super.onStart();
+            googleApiClient.connect();
         }
 
         @Override
         protected void onStop() {
             Log.d("---OnStop", "Stopped");
-            googleApiClient.disconnect();
+            if(googleApiClient.isConnected())
+                googleApiClient.disconnect();
             super.onStop();
         }
 

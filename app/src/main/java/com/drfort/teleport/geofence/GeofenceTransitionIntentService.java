@@ -1,18 +1,14 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.geofence;
 
-import android.app.IntentService;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.drfort.teleport.alarm.AlarmTrigger;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.Circle;
 
 import java.util.List;
 
@@ -43,8 +39,10 @@ public class GeofenceTransitionIntentService extends WakefulBroadcastReceiver {
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL){
 
             List trigerringGeofences = geofencingEvent.getTriggeringGeofences();
-            Log.d("--In Geofence:","Inside");
+            Log.d("--In Geofence:", "Inside");
             GeofenceTrigger.clearGeofencingDetails();
+            AlarmTrigger alarmTrigger = new AlarmTrigger(context);
+            alarmTrigger.triggerAlarmNow();
         }
     }
 

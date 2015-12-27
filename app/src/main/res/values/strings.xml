@@ -6,5 +6,39 @@
     <string name="invalid_lat_long_used">Invalid Latitude and Longitude</string>
     <string name="no_address_found">No Valid Address Found</string>
     <string name="address_found">Address Found</string>
-    <string name="destination_key">DestinationGeofence</string>
+    <string name="destination_geofence">DestinationGeofence</string>
+
+    <string name="defaultRingtoneText">Default Ringtone</string>
+    <string name="selectRingtoneText">Select Ringtone</string>
+
+    <string name="pref_location_title">Location Settings</string>
+
+    <!-- Settings Keys-->
+    <string name="main_settings_key">settings_main</string>
+    <string name="main_settings_title">Settings</string>
+
+    <string name="alarm_settings_key">settings_alarm</string>
+    <string name="alarm_settings_title">Alarm Settings</string>
+    <string name="alarm_key">alarm</string>
+    <string name="alarm_title">Alarm</string>
+
+    <string name="location_settings_key">settings_location</string>
+    <string name="location_settings_title">Location Settings</string>
+    <string name="radius_key">radius</string>
+    <string name="radius_title">Radius Range(1 to 30 km)</string>
+    <string name="radius_hint">Radius in km</string>
+    <string name="destination_key">destination</string>
+    <string name="destination_title">Destination</string>
+    <string name="savedLocations_key">savedLocations</string>
+    <string name="savedLocations_title">Saved Locations</string>
+
+    <string name="ringtone_settings_key">ringtone_settings</string>
+    <string name="ringtone_settings_title">Ringtone Settings</string>
+    <string name="ringtone_switch_key">ringtone_switch</string>
+    <string name="ringtone_switch_title">Custom Ringtone</string>
+    <string name="ringtone_search_key">ringtone_search</string>
+    <string name="ringtone_search_title">Ringtone</string>
+    <string name="ringtone_search_summary">Default Alarm Ringtone</string>
+    <string name="ringtone_search_default">content://settings/system/alarm_alert</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.constants;
 
 /**
  * Created by ssres on 12/8/15.
@@ -27,5 +27,9 @@ public final class Constants {
             PACKAGE_NAME + ".geofence_pending_intent";
     public static final String GEOFENCE_CIRCLE =
             PACKAGE_NAME + ".circle";
+
+    //DB Constants
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "SavedLocations.db";
 
 }

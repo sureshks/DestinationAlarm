@@ -4,20 +4,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.drfort.teleport.geofence.GeofenceTransitionIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -30,7 +26,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -40,7 +35,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class MapsActivity extends AppCompatActivity
+        implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
@@ -137,9 +133,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //mCurrentLocation = location;
         //mLatitudeText = mCurrentLocation.getLatitude();
-        mLatitudeText = 12.1260d;
         //mLongitudeText = mCurrentLocation.getLongitude();
-        mLongitudeText = 78.1540d;
         Log.d("Maps:", "---Last Latitude is:" + String.valueOf(mLatitudeText));
         Log.d("Maps:", "---Last Longitude is:" + String.valueOf(mLongitudeText));
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);

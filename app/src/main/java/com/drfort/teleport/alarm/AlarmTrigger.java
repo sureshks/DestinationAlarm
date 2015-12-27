@@ -1,11 +1,12 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.util.Log;
+
+import com.drfort.teleport.constants.Constants;
 
 import java.util.Calendar;
 

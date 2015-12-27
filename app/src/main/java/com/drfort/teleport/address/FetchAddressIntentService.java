@@ -1,4 +1,4 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.address;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.drfort.teleport.constants.Constants;
+import com.drfort.teleport.wakeupatdestination.R;
 
 import java.io.IOException;
 import java.util.ArrayList;

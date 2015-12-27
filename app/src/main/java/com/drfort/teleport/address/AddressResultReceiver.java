@@ -1,4 +1,4 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.address;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.drfort.teleport.constants.Constants;
 
 /**
  * Created by ssres on 12/8/15.

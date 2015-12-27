@@ -1,8 +1,13 @@
-package com.drfort.teleport.wakeupatdestination;
+package com.drfort.teleport.maps;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.GeomagneticField;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -10,6 +15,8 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import com.drfort.teleport.wakeupatdestination.MainActivityMaps;
+import com.drfort.teleport.wakeupatdestination.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -18,6 +25,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,21 +37,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class GoogleMapsHelper
         implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, SensorEventListener{
 
 
     protected GoogleMap mMap;
     protected GoogleApiClient mGoogleApiClient;
-    private LocationRequest locationRequest;
+    private LocationRequest locationRequest = null;
     private Context context;
     private Marker currentLocationMarker;
+
+    private float declination;
 
     public GoogleMapsHelper(Context context,GoogleMap mMap){
         this.context = context;
         this.mMap = mMap;
     }
 
-    protected synchronized GoogleApiClient getGoogleClient(){
+    public synchronized GoogleApiClient getGoogleClient(){
         Log.d("Maps:", "---GoogleClient");
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
@@ -58,14 +69,6 @@ public class GoogleMapsHelper
         if(!isLocationServiceEnabled()){
             showLocationSettingsAlert();
         }
-
-        if(mGoogleApiClient.isConnected()==false){
-            Log.d("---ConnectionStatus","Not connected");
-        }
-        if(getLastLocation() == null){
-            Log.d("MapsLastLocation","Null Location");
-        }
-
         startLocationUpdate();
     }
 
@@ -81,6 +84,15 @@ public class GoogleMapsHelper
 
     @Override
     public void onLocationChanged(Location location) {
+
+        GeomagneticField magneticField = new GeomagneticField(
+                (float)location.getLatitude(),
+                (float)location.getLongitude(),
+                (float)location.getAltitude(),
+                System.currentTimeMillis());
+
+        declination = magneticField.getDeclination();
+
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
         LatLng currentPosition = getPosition(location);
         markLocation(currentPosition,"You're here");
@@ -91,8 +103,8 @@ public class GoogleMapsHelper
 
     protected LatLng getPosition(Location location){
         MainActivityMaps.location = location;
-        Log.d("Longitude",String.valueOf(location.getLongitude()));
-        Log.d("Latitude",String.valueOf(location.getLatitude()));
+        //Log.d("Longitude",String.valueOf(location.getLongitude()));
+        //Log.d("Latitude",String.valueOf(location.getLatitude()));
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
@@ -102,6 +114,8 @@ public class GoogleMapsHelper
         }
         currentLocationMarker = mMap.addMarker(new MarkerOptions().position(position));
         currentLocationMarker.setTitle(positionName);
+        currentLocationMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location));
+        currentLocationMarker.setFlat(false);
         currentLocationMarker.setDraggable(false);
 
     }
@@ -112,6 +126,7 @@ public class GoogleMapsHelper
     }
 
     protected void startLocationUpdate(){
+        Log.d("GoogleMaps","StartLocationupdate");
         locationRequest = new LocationRequest();
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(500);
@@ -147,4 +162,30 @@ public class GoogleMapsHelper
     }
 
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Log.d("SensorChange","true");
+        float[] rotationMatrix = null;
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+            SensorManager.getRotationMatrixFromVector(
+                    rotationMatrix, event.values);
+            float[] orientation = new float[3];
+            SensorManager.getOrientation(rotationMatrix, orientation);
+            float bearing = ((float) Math.toDegrees(orientation[0])) + declination;
+            updateCamera(bearing);
+        }
+    }
+
+    private void updateCamera(float bearing){
+        CameraPosition oldPos = mMap.getCameraPosition();
+
+        CameraPosition pos = CameraPosition.builder(oldPos)
+                .bearing(bearing).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
